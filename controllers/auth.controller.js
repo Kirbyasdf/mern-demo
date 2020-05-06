@@ -8,11 +8,12 @@ exports.getCurrentUser = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
     if (!user) {
-      return res.status(404).json({ sucess: false, msg: "no user foun with id" + req.user.id });
+      return res.status(404).json({ sucess: false, msg: "no user foun with id: " + req.user.id });
     }
     res.json(user);
   } catch (err) {
     console.error(err.message);
+    console.log("HEY IM THE REASON THIS IS BROKEN");
     res.status(500).send("Server Error");
   }
 };
@@ -46,7 +47,6 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-  console.count("requsted");
 
   try {
     let user = await User.findOne({ email });

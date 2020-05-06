@@ -25,7 +25,6 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
       register({ name, email, password });
     }
   };
-
   if (isAuthenticated) {
     return <Redirect to="/dashboard" />;
   }
@@ -99,4 +98,4 @@ const msp = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
 });
 
-export default connect(null, { setAlert, register })(Register);
+export default connect(msp, { setAlert, register })(Register);

@@ -16,11 +16,12 @@ const intitalState = {
 
 export default function (state = intitalState, action) {
   const { type, payload } = action;
+  console.log(type);
   switch (type) {
     case USER_LOADED:
       return {
         ...state,
-        usAuthenticated: true,
+        isAuthenticated: true,
         loading: false,
         user: payload,
       };
