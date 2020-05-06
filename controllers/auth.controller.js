@@ -52,13 +52,15 @@ exports.login = async (req, res) => {
     let user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({ sucess: false, msg: "No user found with that email" });
+      return res
+        .status(404)
+        .json({ sucess: false, errors: [{ msg: "No user found with that email" }] });
     }
 
     const isMatch = await user.matchPassword(password);
 
     if (!isMatch) {
-      return res.status(401).json({ sucess: false, msg: "Invalid Login" });
+      return res.status(401).json({ sucess: false, errors: [{ msg: "Invalid Login" }] });
     }
 
     sendTokenResponse(user, 200, res);

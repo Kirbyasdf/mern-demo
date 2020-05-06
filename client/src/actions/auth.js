@@ -8,6 +8,7 @@ import {
   AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
+  LOGOUT,
 } from "./types";
 
 export const loadUser = () => async (dispatch) => {
@@ -69,6 +70,7 @@ export const login = (email, password) => async (dispatch) => {
     });
   } catch (err) {
     const errors = err.response.data.errors;
+    console.log(err.response.data);
     if (errors) {
       errors.forEach((error) => dispatch(setAlert(error.msg, "danger")));
     }
@@ -76,4 +78,8 @@ export const login = (email, password) => async (dispatch) => {
       type: LOGIN_FAIL,
     });
   }
+};
+
+export const logout = () => (dispatch) => {
+  dispatch({ type: LOGOUT });
 };
