@@ -9,9 +9,7 @@ exports.getCurUsersProfile = async (req, res) => {
       user: req.user.id,
     }).populate("user", ["name", "avatar"]);
     if (!profile) {
-      return res
-        .status(404)
-        .json({ sucess: false, msg: "No Profile Found for this user" });
+      return res.status(404).json({ sucess: false, msg: "No Profile Found for this user" });
     }
 
     res.status(200).json({ sucess: true, data: profile });
@@ -95,22 +93,15 @@ exports.getAllProfiles = async (req, res) => {
 exports.getProfile = async (req, res) => {
   const { id } = req.params;
   try {
-    const profile = await Profile.findById(id).populate("user", [
-      "name",
-      "avatar",
-    ]);
+    const profile = await Profile.findById(id).populate("user", ["name", "avatar"]);
     if (!profile) {
-      res
-        .status(404)
-        .json({ sucess: false, msg: "No profile found with id :" + id });
+      res.status(404).json({ sucess: false, msg: "No profile found with id :" + id });
     }
     res.status(200).json({ sucess: true, data: profile });
   } catch (err) {
     console.error(err.message);
     if (err.kid == "ObjectId") {
-      return res
-        .status(404)
-        .json({ sucess: false, msg: "No profile found with id :" + id });
+      return res.status(404).json({ sucess: false, msg: "No profile found with id :" + id });
     }
     res.status(500).json({ sucess: false, msg: "SERVER ERROR" });
   }
@@ -161,9 +152,7 @@ exports.deleteExperience = async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id });
 
-    const removeIndex = profile.experience
-      .map((item) => item.id)
-      .indexOf(req.params.exp_id);
+    const removeIndex = profile.experience.map((item) => item.id).indexOf(req.params.exp_id);
 
     profile.experience.splice(removeIndex, 1);
 
@@ -182,15 +171,7 @@ exports.addEducation = async (req, res) => {
     return res.status(400).json({ sucess: false, errors: errors.array() });
   }
 
-  const {
-    school,
-    degree,
-    fieldofstudy,
-    from,
-    to,
-    current,
-    description,
-  } = req.body;
+  const { school, degree, fieldofstudy, from, to, current, description } = req.body;
 
   const newEdu = {
     school,
@@ -217,9 +198,7 @@ exports.deleteEducation = async (req, res) => {
   try {
     const profile = await Profile.findOne({ user: req.user.id });
 
-    const removeIndex = profile.education
-      .map((item) => item.id)
-      .indexOf(req.params.edu_id);
+    const removeIndex = profile.education.map((item) => item.id).indexOf(req.params.edu_id);
 
     profile.education.splice(removeIndex, 1);
 

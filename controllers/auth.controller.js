@@ -8,9 +8,7 @@ exports.getCurrentUser = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
     if (!user) {
-      return res
-        .status(404)
-        .json({ sucess: false, msg: "no user foun with id" + req.user.id });
+      return res.status(404).json({ sucess: false, msg: "no user foun with id" + req.user.id });
     }
     res.json(user);
   } catch (err) {
@@ -28,9 +26,7 @@ exports.register = async (req, res) => {
     const { name, password, email } = req.body;
     let user = await User.findOne({ email: email });
     if (user) {
-      return res
-        .status(400)
-        .json({ sucess: false, errors: [{ msg: "user already exists" }] });
+      return res.status(400).json({ sucess: false, errors: [{ msg: "user already exists" }] });
     }
 
     const avatar = gravatar.url(email, {
@@ -50,21 +46,21 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
+  console.count("requsted");
 
   try {
     let user = await User.findOne({ email });
 
     if (!user) {
-      return res
-        .status(404)
-        .json({ sucess: false, msg: "No user found with that email" });
+      return res.status(404).json({ sucess: false, msg: "No user found with that email" });
     }
 
     const isMatch = await user.matchPassword(password);
 
     if (!isMatch) {
-      return next(new ErrorResponse("Invalid Login", 401));
+      return res.status(401).json({ sucess: false, msg: "Invalid Login" });
     }
+
     sendTokenResponse(user, 200, res);
   } catch (err) {
     console.error(err);
