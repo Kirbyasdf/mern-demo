@@ -1,25 +1,28 @@
 import {
-  REGISTER_FAIL,
   REGISTER_SUCCESS,
-  AUTH_ERROR,
+  REGISTER_FAIL,
   USER_LOADED,
-  LOGIN_FAIL,
+  AUTH_ERROR,
   LOGIN_SUCCESS,
+  LOGIN_FAIL,
   LOGOUT,
 } from "../actions/types";
 
-const intitalState = {
+const initialState = {
   token: localStorage.getItem("token"),
   isAuthenticated: null,
   loading: true,
   user: null,
 };
 
-export default function (state = intitalState, action) {
+export default function (state = initialState, action) {
+  console.log("auth reducer call", action);
+
   const { type, payload } = action;
-  console.log(type);
+
   switch (type) {
     case USER_LOADED:
+      console.log("user loaded reducer");
       return {
         ...state,
         isAuthenticated: true,
@@ -27,6 +30,13 @@ export default function (state = intitalState, action) {
         user: payload,
       };
     case REGISTER_SUCCESS:
+      localStorage.setItem("token", payload.token);
+      return {
+        ...state,
+        ...payload,
+        isAuthenticated: true,
+        loading: false,
+      };
     case LOGIN_SUCCESS:
       localStorage.setItem("token", payload.token);
       return {
@@ -35,16 +45,14 @@ export default function (state = intitalState, action) {
         isAuthenticated: true,
         loading: false,
       };
-    case REGISTER_FAIL:
-    case LOGIN_FAIL:
     case AUTH_ERROR:
     case LOGOUT:
-      localStorage.removeItem("token");
       return {
         ...state,
         token: null,
         isAuthenticated: false,
         loading: false,
+        user: null,
       };
     default:
       return state;

@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const connectDB = require("./config/db.js");
+const morgan = require("morgan");
 const userRouter = require("./routes/user.router.js");
 const authRouter = require("./routes/auth.router.js");
 const profileRouter = require("./routes/profile.router.js");
@@ -13,6 +14,9 @@ connectDB();
 //middleware
 
 app.use(express.json());
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 const PORT = process.env.PORT || 4000;
 
